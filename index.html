@@ -1,10 +1,284 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Hello World</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page with Dummy Data</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            margin: 0 auto 10px;
+            display: block;
+        }
+        .profile-name {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .profile-title {
+            margin: 5px 0 0;
+            font-weight: normal;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .profile-body {
+            padding: 20px;
+        }
+        .profile-detail {
+            margin-bottom: 15px;
+        }
+        .detail-label {
+            font-size: 0.8rem;
+            color: #777;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .detail-value {
+            font-size: 0.95rem;
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .skill {
+            background: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+        .social-link {
+            color: #555;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        .social-link:hover {
+            color: #6e8efb;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            padding: 8px 15px;
+            background: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #5a7ae0;
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello World from GitHub!</h1>
+    <h1>User Profiles</h1>
+    
+    <div class="controls">
+        <button onclick="addRandomProfile()">Add Random Profile</button>
+        <button onclick="clearProfiles()">Clear All</button>
+    </div>
+    
+    <div class="container" id="profiles-container">
+        <!-- Profiles will be added here by JavaScript -->
+    </div>
+
+    <script>
+        // Dummy data generator
+        const firstNames = ['Emma', 'Liam', 'Olivia', 'Noah', 'Ava', 'William', 'Sophia', 'James', 'Isabella', 'Oliver'];
+        const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+        const jobTitles = ['Web Developer', 'Graphic Designer', 'Marketing Specialist', 'Data Analyst', 'Project Manager', 'UX Designer', 'Software Engineer', 'Content Writer', 'Sales Representative', 'Accountant'];
+        const skillsList = ['JavaScript', 'HTML', 'CSS', 'React', 'Node.js', 'Python', 'Photoshop', 'UI/UX', 'SEO', 'SQL', 'PHP', 'Java', 'Swift', 'Angular', 'Vue'];
+        const cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'];
+        
+        // Social media platforms
+        const socialPlatforms = [
+            { icon: '📱', name: 'phone' },
+            { icon: '✉️', name: 'email' },
+            { icon: '💼', name: 'portfolio' },
+            { icon: '🐦', name: 'twitter' },
+            { icon: '📘', name: 'facebook' },
+            { icon: '🔗', name: 'linkedin' },
+            { icon: '📷', name: 'instagram' }
+        ];
+        
+        // Generate random phone number
+        function generatePhoneNumber() {
+            return `(${Math.floor(100 + Math.random() * 900)}) ${Math.floor(100 + Math.random() * 900)}-${Math.floor(1000 + Math.random() * 9000)}`;
+        }
+        
+        // Generate random email
+        function generateEmail(firstName, lastName) {
+            const domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'example.com', 'company.com'];
+            return `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${domains[Math.floor(Math.random() * domains.length)]}`;
+        }
+        
+        // Generate random date (between 18 and 65 years ago)
+        function generateBirthDate() {
+            const currentYear = new Date().getFullYear();
+            const year = currentYear - Math.floor(18 + Math.random() * 47);
+            const month = Math.floor(1 + Math.random() * 12);
+            const day = Math.floor(1 + Math.random() * 28);
+            return `${month}/${day}/${year}`;
+        }
+        
+        // Generate random skills (3-6 skills)
+        function generateSkills() {
+            const numSkills = Math.floor(3 + Math.random() * 4);
+            const shuffled = [...skillsList].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, numSkills);
+        }
+        
+        // Generate random social links (2-4 platforms)
+        function generateSocialLinks(firstName, lastName) {
+            const numLinks = Math.floor(2 + Math.random() * 3);
+            const shuffled = [...socialPlatforms].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, numLinks).map(platform => {
+                return {
+                    icon: platform.icon,
+                    name: platform.name,
+                    url: `https://${platform.name}.com/${firstName.toLowerCase()}${lastName.toLowerCase()}${Math.floor(100)}`
+                };
+            });
+        }
+        
+        // Generate a random profile
+        function generateProfile() {
+            const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            const jobTitle = jobTitles[Math.floor(Math.random() * jobTitles.length)];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            const gender = Math.random() > 0.5 ? 'men' : 'women';
+            const picId = Math.floor(Math.random() * 100);
+            
+            return {
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                name: `${firstName} ${lastName}`,
+                jobTitle: jobTitle,
+                location: `${city}`,
+                email: generateEmail(firstName, lastName),
+                phone: generatePhoneNumber(),
+                birthDate: generateBirthDate(),
+                skills: generateSkills(),
+                socialLinks: generateSocialLinks(firstName, lastName),
+                picture: `https://randomuser.me/api/portraits/${gender}/${picId}.jpg`
+            };
+        }
+        
+        // Create profile card HTML
+        function createProfileCard(profile) {
+            return `
+                <div class="profile-card" id="profile-${profile.id}">
+                    <div class="profile-header">
+                        <img src="${profile.picture}" alt="${profile.name}" class="profile-pic">
+                        <h2 class="profile-name">${profile.name}</h2>
+                        <p class="profile-title">${profile.jobTitle}</p>
+                    </div>
+                    <div class="profile-body">
+                        <div class="profile-detail">
+                            <span class="detail-label">Location</span>
+                            <span class="detail-value">${profile.location}</span>
+                        </div>
+                        <div class="profile-detail">
+                            <span class="detail-label">Email</span>
+                            <span class="detail-value">${profile.email}</span>
+                        </div>
+                        <div class="profile-detail">
+                            <span class="detail-label">Phone</span>
+                            <span class="detail-value">${profile.phone}</span>
+                        </div>
+                        <div class="profile-detail">
+                            <span class="detail-label">Date of Birth</span>
+                            <span class="detail-value">${profile.birthDate}</span>
+                        </div>
+                        <div class="profile-detail">
+                            <span class="detail-label">Skills</span>
+                            <div class="skills">
+                                ${profile.skills.map(skill => `<span class="skill">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        ${profile.socialLinks.map(link => `<a href="${link.url}" class="social-link" title="${link.name}">${link.icon}</a>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Add a random profile to the container
+        function addRandomProfile() {
+            const profile = generateProfile();
+            const profileCard = createProfileCard(profile);
+            document.getElementById('profiles-container').insertAdjacentHTML('beforeend', profileCard);
+        }
+        
+        // Clear all profiles
+        function clearProfiles() {
+            document.getElementById('profiles-container').innerHTML = '';
+        }
+        
+        // Add 3 random profiles on page load
+        window.onload = function() {
+            for (let i = 0; i < 3; i++) {
+                addRandomProfile();
+            }
+        };
+    </script>
 </body>
 </html>
